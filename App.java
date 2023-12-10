@@ -1,15 +1,44 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.Random;
 
 public class App {
     public static void main(String[] args) {
         Member member1=new MemberReguler(10);
 
+        Scanner scanner = new Scanner(System.in);
+
+        String Username = "Admin";
+        String Password = "123";
+
+        System.out.print("Enter Username\t: ");
+        String username = scanner.nextLine();
+
+        System.out.print("Enter Password\t: ");
+        String password = scanner.nextLine();
+
+        if (username.equals(Username) && password.equals(Password)) {
+            String captcha = generateRandomCaptcha();
+
+            System.out.println("Generated Captcha\t: " + captcha);
+
+            System.out.print("Enter the captcha\t: ");
+            String userCaptcha = scanner.nextLine();
+
+            if (userCaptcha.equals(captcha)) {
+                System.out.println("Login Success. Welcome, " + username + "!");
+            } else {
+                System.out.println("Authentication failed. Incorrect captcha.");
+            }
+        } else {
+            System.out.println("Authentication failed. Incorrect username or password.");
+        }
+
+        
         System.out.println("Member1 memiliki poin : " + member1.getPoin());
         System.out.println("");
 
-        Scanner scanner = new Scanner(System.in);
         Date tanggal = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy");
         String tanggalTransaksi = dateFormat.format(tanggal);
@@ -79,5 +108,19 @@ public class App {
         } finally {
             scanner.close();
         }
+    }
+
+    private static String generateRandomCaptcha() {
+        int length = 6;
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder captcha = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            captcha.append(characters.charAt(index));
+        }
+
+        return captcha.toString();
     }
 }
